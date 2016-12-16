@@ -533,6 +533,91 @@
         }
     };
 
+	function buildpokemonlistdetail(username, pokemonid, position) {
+        var pokemon = getPokemon(pokemonid),
+            rare = '',
+            special = '';
+
+        if (pokemon) {
+            link = (google + url(pokemon));
+            if (pokemon.includes('+1')|| pokemon.includes('+2')) {
+                rare = '*';
+            }
+
+            if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) >= 1 ) {
+              special = 'Shiny ';
+            }
+
+            return $.lang.get('pokemonsystem.listpokemon.page.detail', special, replace(pokemon), rare, pokemonid , getAmount(username, parseInt(pokemonid)), position);
+        } else {
+            return $.lang.get('pokemonsystem.listpokemon.page.detail.notfound', pokemonid);
+        }
+    };
+	
+	function listpokemon(sender, pageNumber)
+	{
+		var pokemonKeys = $.inidb.GetKeyList(username.toLowerCase() + '_pokemon', '');
+		
+		var numberPerPage=5;
+		var outputDialogue="";
+		
+		if (pokemonKeys.length)
+		{
+			if (pokemonKeys.length < ( 1 + (numberPerPage * ( pageNumber -1 ) ) ) )
+			{
+				$.say($.lang.get('pokemonsystem.listpokemon.page.toofew', $.userPrefix(sender), ceil(pokemonKeys.length)));
+				return;
+			}
+			
+			outputDialogue=$.lang.get('pokemonsystem.listpokemon.page.start', $.userPrefix(sender), pageNumber, ceil(pokemonKeys.length));
+
+			var firstTime=true;
+			var counter=0;
+
+//			for (i=((pageNumber-1)*numberPerPage);(i < pokemonKeys.length && i < (pageNumber * numberPerPage) );i++)
+			
+			for (i in pokemonKeys)
+			{
+				if (counter < ( (pageNumber-1) * numberPerPage)
+				{
+					// do nothing;  simply putting this here to make the loop faster.
+				}
+				else if ( counter >= (pageNumber * numberPerPage) )
+				{
+					$.say(outputDialogue);
+					return;
+				}
+				else 
+				{
+					if (!firstTime)
+					{
+						outputDialogue=outputDialogue+", ";
+					}
+					var pokemonId = pokemonKeys[i].split('_')[1]					
+					outputDialogue=outputDialogue+buildpokemonlistdetail(sender,pokemonid, counter+1);
+					firstTime=false;
+				}
+				counter++;
+				
+//			var pokemonId = pokemonKeys[i].split('_')[1]					
+//			var pokemon = getPokemon(pokemonid);			
+//			replace(pokemon)  <--- pokemon name
+//
+//           if (pokemon.includes('+1') || pokemon.includes('+2')) {
+//                rare = $.lang.get('pokemonsystem.rarecheck');
+//            }
+			}
+			// We fell out while iterating;  we checked above that we had enough. So we have a partial page.
+			$.say(outputDialogue);
+
+		}
+		else
+		{
+			$.say($.lang.get('pokemonsystem.listpokemon.null', $.userPrefix(sender)));
+		}
+	}
+	
+	
     /**
     * @function getTeam
     * @param pokemon
@@ -569,6 +654,9 @@
         return;
       }
     };
+	
+
+	
 
     /**
     * @function replace
@@ -599,6 +687,17 @@
             }
             checkpokemon(sender, action);
         }
+		
+		if (command.equalsIgnoreCase('pokelist')) {
+			if (!action) {
+				listpokemon(sender, 1);
+			}
+			else
+			{
+				listpokemon(sender, parseInt(action));
+			}
+			return;
+		}
 
         if (command.equalsIgnoreCase('pokeballgo')) {
             catchPokemon(sender);

@@ -1,4 +1,4 @@
-$.lang.register('pokemonsystem.pokemonhelp', 'Usage: !pokemon, !pokedex, !pokeballgo, !setpokemon, !unsetpokemon, !buypokemon, !sendpokemon, !battle <name>, !team, !addteam <id>, !kickteam <id>, !resetteam.');
+$.lang.register('pokemonsystem.pokemonhelp', 'Usage: !pokemon, !pokedex, !pokeballgo, !setpokemon, !unsetpokemon, !buypokemon, !sendpokemon, !battle <name>, !team, !addteam <id>, !kickteam <id>, !resetteam,!pokelist <page:#>.');
 $.lang.register('pokemonsystem.split.success', '$1 your favorite Pokémon was removed.');
 $.lang.register('pokemonsystem.split.404', '$1 you did not set your favorite Pokémon yet.');
 $.lang.register('pokemonsystem.marry.success', '$1 set $2 as a favorite Pokédex');
@@ -46,6 +46,14 @@ $.lang.register('pokemonsystem.win.3', '$3\'s ($1) ran up to $4\'s ($2) and it g
 
 $.lang.register('pokemonsystem.stalemate.1', '$3\'s ($1) and $4\'s ($2) heaadbutted each other with such force it knocked both of them out! DRAW!');
 $.lang.register('pokemonsystem.lose.1', '$3\'s ($1) attacked $4\'s ($2) and slipped off the ring! $4 wins +25 $5!!');
+$.lang.register('pokemonsystem.listpokemon.null', 'You don\'t have any pokemon yet! Use !pokeballgo to capture some!');
+$.lang.register('pokemonsystem.listpokemon.page.start', '$1\'s Pokemon: Page $2 of $3 - ');
+$.lang.register('pokemonsystem.listpokemon.page.toofew', '$1, you only have $2 pages of Pokemon in your Pokedex.');
+$.lang.register('pokemonsystem.listpokemon.page.detail', '$1$2$3 (#$4) Qty: $5');
+
+
+
+
 
 $.lang.register('pokemonsystem.pokemon.1', 'Bulbasaur');
 $.lang.register('pokemonsystem.pokemon.2', 'Ivysaur');
