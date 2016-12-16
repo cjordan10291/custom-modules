@@ -535,20 +535,19 @@
 
 	function buildpokemonlistdetail(username, pokemonid, position) {
         var pokemon = getPokemon(pokemonid),
-            rare = '',
             special = '';
 
         if (pokemon) {
             link = (google + url(pokemon));
-            if (pokemon.includes('+1')|| pokemon.includes('+2')) {
-                rare = '*';
-            }
+//            if (pokemon.includes('+1')|| pokemon.includes('+2')) {
+//                rare = '*';
+//            }
 
             if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) >= 1 ) {
               special = 'Shiny ';
             }
 
-            return $.lang.get('pokemonsystem.listpokemon.page.detail', special, replace(pokemon), rare, pokemonid , getAmount(username, parseInt(pokemonid)), position);
+            return $.lang.get('pokemonsystem.listpokemon.page.detail', special, replace(pokemon), pokemonid , getAmount(username, parseInt(pokemonid)), position);
         } else {
             return $.lang.get('pokemonsystem.listpokemon.page.detail.notfound', pokemonid);
         }
@@ -556,20 +555,19 @@
 	
 	function listpokemon(sender, pageNumber)
 	{
-		var pokemonKeys = $.inidb.GetKeyList(username.toLowerCase() + '_pokemon', '');
+		var pokemonKeys = $.inidb.GetKeyList(sender.toLowerCase() + '_pokemon', '');
 		
 		var numberPerPage=5;
 		var outputDialogue="";
-		
 		if (pokemonKeys.length)
 		{
 			if (pokemonKeys.length < ( 1 + (numberPerPage * ( pageNumber -1 ) ) ) )
 			{
-				$.say($.lang.get('pokemonsystem.listpokemon.page.toofew', $.userPrefix(sender), ceil(pokemonKeys.length)));
+				$.say($.lang.get('pokemonsystem.listpokemon.page.toofew', $.userPrefix(sender), Math.ceil(pokemonKeys.length/ numberPerPage), pokemonKeys.length));
 				return;
 			}
 			
-			outputDialogue=$.lang.get('pokemonsystem.listpokemon.page.start', $.userPrefix(sender), pageNumber, ceil(pokemonKeys.length));
+			outputDialogue=$.lang.get('pokemonsystem.listpokemon.page.start', $.userPrefix(sender), pageNumber, Math.ceil(pokemonKeys.length / numberPerPage), pokemonKeys.length);
 
 			var firstTime=true;
 			var counter=0;
@@ -578,7 +576,7 @@
 			
 			for (i in pokemonKeys)
 			{
-				if (counter < ( (pageNumber-1) * numberPerPage)
+				if (counter < ( (pageNumber-1) * numberPerPage) )
 				{
 					// do nothing;  simply putting this here to make the loop faster.
 				}
@@ -591,10 +589,10 @@
 				{
 					if (!firstTime)
 					{
-						outputDialogue=outputDialogue+", ";
+						outputDialogue=outputDialogue+"; ";
 					}
 					var pokemonId = pokemonKeys[i].split('_')[1]					
-					outputDialogue=outputDialogue+buildpokemonlistdetail(sender,pokemonid, counter+1);
+					outputDialogue=outputDialogue+buildpokemonlistdetail(sender,pokemonId, counter+1);
 					firstTime=false;
 				}
 				counter++;
@@ -655,7 +653,12 @@
       }
     };
 	
-
+	
+	function findPokemonId(sender,action)
+	{
+		$.say("Not implemented yet, send cookies to IAmGozar to get him to finish it.");
+	}
+	
 	
 
     /**
@@ -687,9 +690,9 @@
             }
             checkpokemon(sender, action);
         }
-		
 		if (command.equalsIgnoreCase('pokelist')) {
 			if (!action) {
+				
 				listpokemon(sender, 1);
 			}
 			else
@@ -698,6 +701,19 @@
 			}
 			return;
 		}
+		
+		if (command.equalsIgnoreCase('pokefindid')) {
+			if (!action)
+			{
+				$.say($.lang.get('pokemonsystem.pokefindid.null'));
+			}
+			else
+			{
+				findPokemonId(sender,action);
+			}
+			return;
+        }
+
 
         if (command.equalsIgnoreCase('pokeballgo')) {
             catchPokemon(sender);
@@ -772,6 +788,7 @@
             loadResponses();
             $.registerChatCommand('./games/pokemonSystem.js', 'pokemon');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokedex');
+            $.registerChatCommand('./games/pokemonSystem.js', 'pokelist');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokeballgo');
             $.registerChatCommand('./games/pokemonSystem.js', 'sendpokemon');
             $.registerChatCommand('./games/pokemonSystem.js', 'unsetpokemon');
@@ -783,6 +800,7 @@
             $.registerChatCommand('./games/pokemonSystem.js', 'kickteam');
             $.registerChatCommand('./games/pokemonSystem.js', 'resetteam');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokemonhelp');
+            $.registerChatCommand('./games/pokemonSystem.js', 'pokefindid');
         }
     });
 })();
