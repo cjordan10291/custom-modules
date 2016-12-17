@@ -279,6 +279,13 @@
             $.say($.lang.get('pokemonsystem.sendpokemon.nouser', $.userPrefix(username)));
             return;
         }
+		var originalName=pokemonid;
+		pokemonid=ensureId(pokemonid);
+		
+		if (pokemonid === 0)
+		{
+			$.say($.lang.get('pokemonsystem.pokefindid.notfound',originalName,$.userPrefix(username)));
+		}
 
         var keys = $.inidb.GetKeyList(username + '_plist', ''),
             pokemon = getPokemon(pokemonid),
@@ -341,7 +348,7 @@
 		
         if (!pokemonid) {
             receiver = event.getSender();
-            pokemonid = event.getArgs()[0];
+            pokemonid = ensureId(event.getArgs()[0]);
 			
 			if (!pokemonid)
 			{
@@ -349,6 +356,7 @@
 				return;
 			}
         }
+		pokemonid=ensureId(pokemonid);	
 		
 
         var pokemon = getPokemon(pokemonid),
@@ -700,13 +708,13 @@
         return;
       } else {
         $.inidb.RemoveKey('team', sender, action);
-        $.say($.userPrefix(sender) + $.lang.get('pokemonsystem.team.kick', getPokemon(action)));
+        $.say($.userPrefix(sender) + $.lang.get('pokemonsystem.team.kick', replace(getPokemon(action))));
         return;
       }
     };
 	
 	
-	function findPokemonId(sender,action)
+	function getIdForPokemonName(searchName)
 	{
 		var maxId=parseInt($.lang.get('pokemonsystem.maxpokemonid'));
 		for ( var i = 1; i < maxId ; i++)
@@ -715,16 +723,54 @@
 			{
 				var splitArray=$.lang.get('pokemonsystem.pokemon.'+i).split(' ');
 				var pokemonName=splitArray[splitArray.length-1];
-				if (pokemonName.equalsIgnoreCase(action))
+				if (pokemonName.equalsIgnoreCase(searchName))
 				{
-					$.say($.lang.get('pokemonsystem.pokefindid.found',pokemonName,i,$.userPrefix(sender)));
-					return;
+					return i;
 				}
 			}
 		}
-		$.say($.lang.get('pokemonsystem.pokefindid.notfound',action,$.userPrefix(sender)));
+		return 0;
 	}
 	
+	
+	function findPokemonId(sender,action)
+	{
+		var pokemonId=getIdForPokemonName(action);
+		if (pokemonId > 0)
+		{
+			$.say($.lang.get('pokemonsystem.pokefindid.found',action,i,$.userPrefix(sender)));
+			return;
+		}
+		$.say($.lang.get('pokemonsystem.pokefindid.notfound',action,$.userPrefix(sender)));
+		return;
+	}
+	
+	
+	function isActionNumeric(action)
+	{
+		if (typeof action == 'undefined')
+		{
+			return false;
+		}
+		if (action === 0)
+		{
+			return true;  
+		}
+		if (isNaN(action))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	function ensureId(action)
+	{
+		if (isActionNumeric(action))
+		{
+			return parseInt(action);
+		}
+		return getIdForPokemonName(action);
+	}
 	
 
     /**
@@ -763,7 +809,7 @@
 			}
 			else
 			{
-				listpokemon(sender, parseInt(action));
+				listpokemon(sender, ensureId(action));
 			}
 			return;
 		}
@@ -786,7 +832,7 @@
         }
 
         if (command.equalsIgnoreCase('sendpokemon')) {
-            sendPokemon(sender, action, parseInt(subAction))
+            sendPokemon(sender, action, subAction)
         }
 
         if (command.equalsIgnoreCase('buypokemon')) {
@@ -798,7 +844,7 @@
         }
 
         if (command.equalsIgnoreCase('setpokemon')) {
-            setPokemon(sender, action);
+            setPokemon(sender, ensureId(action));
         }
 
         if (command.equalsIgnoreCase('unsetpokemon')) {
@@ -823,7 +869,7 @@
                 $.say($.lang.get('pokemonsystem.addteam.usage'));
                 return;
             } else {
-              addTeam(sender, action);
+              addTeam(sender, ensureId(action));
             }
         }
         if (command.equalsIgnoreCase('kickteam')) {
@@ -831,7 +877,7 @@
                 $.say($.lang.get('pokemonsystem.kickteam.usage'));
                 return;
             } else {
-              delTeam(sender, action);
+              delTeam(sender, ensureId(action));
             }
         }
 
