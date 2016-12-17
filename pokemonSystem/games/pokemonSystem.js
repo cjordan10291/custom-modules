@@ -300,12 +300,27 @@
             }
             $.say($.lang.get('pokemonsystem.sendpokemon.success', $.userPrefix(username, true), replace(pokemon), $.userPrefix(receiver), $.shortenURL.getShortURL(link)));
             $.inidb.set(receiver + '_plist', (getUserListPokemons(receiver) + 1), pokemonid);
-            $.inidb.decr(username + '_pokemon', 'pokemon_' + pokemonid, 1);
+			if ($.inidb.get(username + '_pokemon', 'pokemon_' + pokemonid) == 1)
+			{
+				$.inidb.del(username + '_pokemon', 'pokemon_' + pokemonid);	
+			}
+			else
+			{
+				$.inidb.decr(username + '_pokemon', 'pokemon_' + pokemonid, 1);
+			}
             $.inidb.incr(receiver + '_pokemon', 'pokemon_' + pokemonid, 1);
 
             if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) >= 1) {
               $.inidb.set(receiver + '_shinylist', (getUserListPokemons(receiver) + 1), pokemonid);
-              $.inidb.decr(username + '_shinylist', 'pokemon_' + pokemonid, 1);
+              if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) == 1)
+			  {
+				$.inidb.del(username + '_shinylist', 'pokemon_' + pokemonid);  
+			  }
+			  else
+			  {
+				$.inidb.decr(username + '_shinylist', 'pokemon_' + pokemonid, 1);  
+			  }
+              
               $.inidb.incr(receiver + '_shinylist', 'pokemon_' + pokemonid, 1);
             }
 
