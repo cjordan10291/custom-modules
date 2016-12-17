@@ -16,8 +16,12 @@ $.lang.register('pokemonsystem.sendpokemon.success', '$1 sent Pokémon: $2 to $3
 $.lang.register('pokemonsystem.random.0', '$1 you haven\'t caught any Pokémon. Start catching Pokémon with !pokeballgo');
 $.lang.register('pokemonsystem.random.success', 'Who\'s that Pokémon?! It\'s $2 #$3. $4');
 $.lang.register('pokemonsystem.random.married', '$1 your favorite Pokémon is $2.');
-$.lang.register('pokemonsystem.buypokemon.own', '$1 bought another $3 #$4. $5!');
-$.lang.register('pokemonsystem.buypokemon.new', '$1 bought a wild $3 #$4. $5!');
+
+$.lang.register('pokemonsystem.buypokemon.usage', 'buypokemon <id> .  A new basic pokemon costs $1, a rare $2, and a legendary $3.');
+$.lang.register('pokemonsystem.buypokemon.notenough', '$1, a $2 (#$3) would cost $4, and you only have $5.');
+
+$.lang.register('pokemonsystem.buypokemon.own', '$1 bought another $3 #$4 for $6 coins. $5!');
+$.lang.register('pokemonsystem.buypokemon.new', '$1 bought a wild $3 #$4 for $6 coins. $5!');
 $.lang.register('pokemonsystem.rare', '[Rare]');
 $.lang.register('pokemonsystem.legendary', '[Legendary]');
 $.lang.register('pokemonsystem.reward.message', '/me +$1 $2 ');

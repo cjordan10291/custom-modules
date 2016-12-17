@@ -336,10 +336,20 @@
     * @param {number} pokemonid
     */
     function buyPokemon(event, username, receiver, pokemonid) {
+		
+		var pokemonCost=250,normaltorare=2,raretolegendary=2;
+		
         if (!pokemonid) {
             receiver = event.getSender();
             pokemonid = event.getArgs()[0];
+			
+			if (!pokemonid)
+			{
+				$.say($.lang.get('pokemonsystem.buypokemon.usage',pokemonCost, pokemonCost*normaltorare, pokemonCost*normaltorare*raretolegendary));
+				return;
+			}
         }
+		
 
         var pokemon = getPokemon(pokemonid),
             amount = getUserPokemons(receiver),
@@ -355,15 +365,42 @@
         if (pokemon.includes('+1') || pokemon.includes('+2')) {
             $.panelsocketserver.alertImage(gifName+',5');
             rare = $.lang.get('pokemonsystem.rarecheck');
+			pokemonCost = pokemonCost * normaltorare;
+			if (pokemon.includes('+2'))
+			{
+				pokemonCost = pokemonCost * raretolegendary;
+			}
         }
+		
+
+		if (username.startsWith('@')) {
+			username = username.substring(1).toLowerCase();
+		}
+		if (receiver.startsWith('@')) {
+			receiver = receiver.substring(1).toLowerCase();
+		}
+		var currentcoins=$.inidb.get('points', username);
+		
+		if (!currentcoins)
+		{
+			currentcoins=0;
+		}
+		
+		
+		if (currentcoins < pokemonCost)
+		{
+			$.say($.lang.get('pokemonsystem.buypokemon.notenough', $.userPrefix(username), replace(pokemon),pokemonid,pokemonCost,$.inidb.get('points',username)));
+			return;
+		}
+		$.inidb.decr('points',username,pokemonCost);
 
         link = (google + url(pokemon));
 
-        if ($.inidb.exists(receiver + '_pokemon', 'pokemon_' + pokemon) && pokemon) {
-            $.say($.lang.get('pokemonsystem.buypokemon.own', rare + $.userPrefix(receiver, true), unlock, replace(pokemon), pokemonid, $.shortenURL.getShortURL(link)));
+        if ($.inidb.exists(receiver + '_pokemon', 'pokemon_' + pokemonid) && pokemon) {
+            $.say($.lang.get('pokemonsystem.buypokemon.own', rare + $.userPrefix(receiver, true), unlock, replace(pokemon), pokemonid, $.shortenURL.getShortURL(link),pokemonCost));
             $.inidb.incr(receiver + '_pokemon', 'pokemon_' + pokemonid, 1);
         } else {
-            $.say($.lang.get('pokemonsystem.buypokemon.new', rare + $.userPrefix(receiver, true), unlock, replace(pokemon), pokemonid, $.shortenURL.getShortURL(link)));
+            $.say($.lang.get('pokemonsystem.buypokemon.new', rare + $.userPrefix(receiver, true), unlock, replace(pokemon), pokemonid, $.shortenURL.getShortURL(link),pokemonCost));
             $.inidb.incr(receiver + '_pokemon', 'pokemon_' + pokemonid, 1);
             $.inidb.set(receiver + '_plist', (getUserListPokemons(receiver) + 1), pokemonid);
         }
