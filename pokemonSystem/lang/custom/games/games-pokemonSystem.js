@@ -52,8 +52,8 @@ $.lang.register('pokemonsystem.listpokemon.page.toofew', '$1, you only have $2 p
 $.lang.register('pokemonsystem.listpokemon.page.detail', '[$5. $4 $1$2 (id #$3) ]');
 $.lang.register('pokemonsystem.listpokemon.page.detail.notfound', 'Unknown pokemon - (#$1)');
 $.lang.register('pokemonsystem.pokefindid.null', 'Usage: pokefindid <name>');
-$.lang.register('pokemonsystem.pokefindid.found', 'Found $1 with id of #$2');
-$.lang.register('pokemonsystem.pokefindid.notfound', 'Found no pokemon by the name of $1');
+$.lang.register('pokemonsystem.pokefindid.found', '$3, we found $1 with id of #$2');
+$.lang.register('pokemonsystem.pokefindid.notfound', '$2, we found no pokemon by the name of $1');
 
 
 
@@ -378,7 +378,7 @@ $.lang.register('pokemonsystem.pokemon.317','Swalot');
 $.lang.register('pokemonsystem.pokemon.318','Carvanha');
 $.lang.register('pokemonsystem.pokemon.319','Sharpedo');
 $.lang.register('pokemonsystem.pokemon.320','Wailmer');
-$.lang.register('pokemonsystem.pokemon.321','+1 Wailord');
+$.lang.register('pokemonsystem.pokemon.321','Wailord');
 $.lang.register('pokemonsystem.pokemon.322','Numel');
 $.lang.register('pokemonsystem.pokemon.323','Camerupt');
 $.lang.register('pokemonsystem.pokemon.324','Torkoal');
@@ -779,3 +779,4 @@ $.lang.register('pokemonsystem.pokemon.718','+2 Zygarde');
 $.lang.register('pokemonsystem.pokemon.719','+2 Diancie');
 $.lang.register('pokemonsystem.pokemon.720','+2 Hoopa');
 $.lang.register('pokemonsystem.pokemon.721','+2 Volcanion');
+$.lang.register('pokemonsystem.maxpokemonid','721');

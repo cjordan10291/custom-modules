@@ -656,7 +656,21 @@
 	
 	function findPokemonId(sender,action)
 	{
-		$.say("Not implemented yet, send cookies to IAmGozar to get him to finish it.");
+		var maxId=parseInt($.lang.get('pokemonsystem.maxpokemonid'));
+		for ( var i = 1; i < maxId ; i++)
+		{
+			if ($.lang.exists('pokemonsystem.pokemon.'+i))
+			{
+				var splitArray=$.lang.get('pokemonsystem.pokemon.'+i).split(' ');
+				var pokemonName=splitArray[splitArray.length-1];
+				if (pokemonName.equalsIgnoreCase(action))
+				{
+					$.say($.lang.get('pokemonsystem.pokefindid.found',pokemonName,i,$.userPrefix(sender)));
+					return;
+				}
+			}
+		}
+		$.say($.lang.get('pokemonsystem.pokefindid.notfound',action,$.userPrefix(sender)));
 	}
 	
 	
