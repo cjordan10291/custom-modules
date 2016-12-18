@@ -738,7 +738,7 @@
 		var pokemonId=getIdForPokemonName(action);
 		if (pokemonId > 0)
 		{
-			$.say($.lang.get('pokemonsystem.pokefindid.found',action,i,$.userPrefix(sender)));
+			$.say($.lang.get('pokemonsystem.pokefindid.found',action,pokemonId,$.userPrefix(sender)));
 			return;
 		}
 		$.say($.lang.get('pokemonsystem.pokefindid.notfound',action,$.userPrefix(sender)));
