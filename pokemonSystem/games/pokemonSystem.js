@@ -734,14 +734,12 @@
 	
 	function wipePokemonEntries(sender, username)
 	{
-		$.say('Sender:['+sender+']  Username:['+ username+']');
-		if (sender.toLowerCase() != 'iamgozar')
+		if (! $.isAdmin(sender))
 		{
-			$.say('Denied!  You are not god enough to do that!');
+			$.say('Sorry!  This command is limited to channel admins and higher.');
 			return;
 		}
 		$.say('Wiping things out in pokemon system for [' + username + ']');
-		
 		
 		$.inidb.RemoveSection('team', username);
 		$.inidb.del('powners', username);
@@ -835,11 +833,12 @@
 			}
 			return;
 		}
-		if (command.equalsIgnoreCase('iaiacthuluftagn'))
+		if (command.equalsIgnoreCase('pokemonwipedata'))
 		{
 			wipePokemonEntries(sender,action);
 			return;
 		}
+		
 		
 		if (command.equalsIgnoreCase('pokefindid')) {
 			if (!action)
@@ -940,7 +939,7 @@
             $.registerChatCommand('./games/pokemonSystem.js', 'resetteam');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokemonhelp');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokefindid');
-			$.registerChatCommand('./games/pokemonSystem.js', 'iaiacthuluftagn');
+			$.registerChatCommand('./games/pokemonSystem.js', 'pokemonwipedata');
 
         }
     });
