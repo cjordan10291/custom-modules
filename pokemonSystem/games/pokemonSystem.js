@@ -160,7 +160,7 @@
     */
     function getUserAmountList(username, pokemon) {
         if ($.inidb.exists(username.toLowerCase() + '_plist', pokemon)) {
-            var keys = $.inidb.GetKeyList(username + '_plist'),
+            var keys = $.inidb.GetKeyList(username.toLowerCase() + '_plist'),
                 amount = 0,
                 i;
 
@@ -210,28 +210,28 @@
             if (chance <= 8) {
                 if (shiny > 199) {
                     special ='Shiny';
-                    $.inidb.set(username + '_shinylist', (getUserListPokemons(username) + 1), random);
+                    $.inidb.set(username.toLowerCase() + '_shinylist', (getUserListPokemons(username) + 1), random);
                   }
 
                 if (pokemon.includes('+1')) {
                     $.panelsocketserver.alertImage(gifName+',5');
-                    $.inidb.incr('points', username, parseInt($.lang.get('pokemonsystem.reward.rare')));
+                    $.inidb.incr('points', username.toLowerCase(), parseInt($.lang.get('pokemonsystem.reward.rare')));
                     rare = $.lang.get('pokemonsystem.reward.message', $.lang.get('pokemonsystem.reward.rare'), $.pointNameMultiple);
                   }
 
                 if (pokemon.includes('+2')) {
                     $.panelsocketserver.alertImage(gifName+',5');
-                    $.inidb.incr('points', username, parseInt($.lang.get('pokemonsystem.reward.legend')));
+                    $.inidb.incr('points', username.toLowerCase(), parseInt($.lang.get('pokemonsystem.reward.legend')));
                     rare = $.lang.get('pokemonsystem.reward.message', $.lang.get('pokemonsystem.reward.legend'), $.pointNameMultiple);
                   }
 
                 if (getUserPokemon(username, random)) {
                     $.say($.lang.get('pokemonsystem.catch.own', rare + $.userPrefix(username, true), special, replace(pokemon), random, $.shortenURL.getShortURL(link)));
-                    $.inidb.incr(username + '_pokemon', 'pokemon_' + random, parseInt(unlock));
+                    $.inidb.incr(username.toLowerCase() + '_pokemon', 'pokemon_' + random, parseInt(unlock));
                   } else {
                     $.say($.lang.get('pokemonsystem.catch.new', rare + $.userPrefix(username, true), special, replace(pokemon), random, $.shortenURL.getShortURL(link)));
-                    $.inidb.incr(username + '_pokemon', 'pokemon_' + random, parseInt(unlock));
-                    $.inidb.set(username + '_plist', (getUserListPokemons(username) + 1), random);
+                    $.inidb.incr(username.toLowerCase() + '_pokemon', 'pokemon_' + random, parseInt(unlock));
+                    $.inidb.set(username.toLowerCase() + '_plist', (getUserListPokemons(username) + 1), random);
                   }
                 } else {
                   $.say($.lang.get('pokemonsystem.catch.fail', $.userPrefix(username, true), special, replace(pokemon), random, $.shortenURL.getShortURL(link)));
@@ -262,7 +262,7 @@
             if (!getpowners(username)) {
                 $.say($.lang.get('pokemonsystem.random.success', $.userPrefix(username, true), replace(pokemon), random, $.shortenURL.getShortURL(link), myLevel));
             } else {
-                pokemon = getPokemon($.inidb.get('powners', username));
+                pokemon = getPokemon($.inidb.get('powners', username.toLowerCase()));
                 $.say($.lang.get('pokemonsystem.random.married', $.userPrefix(username, true), replace(pokemon).replace('+1', $.lang.get('pokemonsystem.rare')), random, $.shortenURL.getShortURL(link), myLevel));
             }
         }
@@ -287,7 +287,7 @@
 			$.say($.lang.get('pokemonsystem.pokefindid.notfound',originalName,$.userPrefix(username)));
 		}
 
-        var keys = $.inidb.GetKeyList(username + '_plist', ''),
+        var keys = $.inidb.GetKeyList(username.toLowerCase() + '_plist', ''),
             pokemon = getPokemon(pokemonid),
             link,
             i;
@@ -296,39 +296,39 @@
                 rare = $.lang.get('pokemonsystem.rarecheck');
             }
 
-        if ($.inidb.get(username + '_pokemon', 'pokemon_' + pokemonid) >= 1 && pokemon) {
+        if ($.inidb.get(username.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid) >= 1 && pokemon) {
             link = (google + url(pokemon));
             for (i in keys) {
-                if ($.inidb.get(username + '_pokemon', 'pokemon_' + pokemon) < 1) {
-                    $.inidb.del(username + '_plist', keys[i]);
-                    $.inidb.del(username + '_shinylist', keys[i]);
+                if ($.inidb.get(username.toLowerCase() + '_pokemon', 'pokemon_' + pokemon) < 1) {
+                    $.inidb.del(username.toLowerCase() + '_plist', keys[i]);
+                    $.inidb.del(username.toLowerCase() + '_shinylist', keys[i]);
                     break;
                 }
             }
             $.say($.lang.get('pokemonsystem.sendpokemon.success', $.userPrefix(username, true), replace(pokemon), $.userPrefix(receiver), $.shortenURL.getShortURL(link)));
-            $.inidb.set(receiver + '_plist', (getUserListPokemons(receiver) + 1), pokemonid);
-			if ($.inidb.get(username + '_pokemon', 'pokemon_' + pokemonid) == 1)
+            $.inidb.set(receiver.toLowerCase() + '_plist', (getUserListPokemons(receiver) + 1), pokemonid);
+			if ($.inidb.get(username.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid) == 1)
 			{
-				$.inidb.del(username + '_pokemon', 'pokemon_' + pokemonid);	
+				$.inidb.del(username.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid);	
 			}
 			else
 			{
-				$.inidb.decr(username + '_pokemon', 'pokemon_' + pokemonid, 1);
+				$.inidb.decr(username.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid, 1);
 			}
-            $.inidb.incr(receiver + '_pokemon', 'pokemon_' + pokemonid, 1);
+            $.inidb.incr(receiver.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid, 1);
 
-            if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) >= 1) {
-              $.inidb.set(receiver + '_shinylist', (getUserListPokemons(receiver) + 1), pokemonid);
-              if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) == 1)
+            if ($.inidb.get(username.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid) >= 1) {
+              $.inidb.set(receiver.toLowerCase() + '_shinylist', (getUserListPokemons(receiver) + 1), pokemonid);
+              if ($.inidb.get(username.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid) == 1)
 			  {
-				$.inidb.del(username + '_shinylist', 'pokemon_' + pokemonid);  
+				$.inidb.del(username.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid);  
 			  }
 			  else
 			  {
-				$.inidb.decr(username + '_shinylist', 'pokemon_' + pokemonid, 1);  
+				$.inidb.decr(username.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid, 1);  
 			  }
               
-              $.inidb.incr(receiver + '_shinylist', 'pokemon_' + pokemonid, 1);
+              $.inidb.incr(receiver.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid, 1);
             }
 
         } else {
@@ -404,13 +404,13 @@
 
         link = (google + url(pokemon));
 
-        if ($.inidb.exists(receiver + '_pokemon', 'pokemon_' + pokemonid) && pokemon) {
+        if ($.inidb.exists(receiver.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid) && pokemon) {
             $.say($.lang.get('pokemonsystem.buypokemon.own', rare + $.userPrefix(receiver, true), unlock, replace(pokemon), pokemonid, $.shortenURL.getShortURL(link),pokemonCost));
-            $.inidb.incr(receiver + '_pokemon', 'pokemon_' + pokemonid, 1);
+            $.inidb.incr(receiver.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid, 1);
         } else {
             $.say($.lang.get('pokemonsystem.buypokemon.new', rare + $.userPrefix(receiver, true), unlock, replace(pokemon), pokemonid, $.shortenURL.getShortURL(link),pokemonCost));
-            $.inidb.incr(receiver + '_pokemon', 'pokemon_' + pokemonid, 1);
-            $.inidb.set(receiver + '_plist', (getUserListPokemons(receiver) + 1), pokemonid);
+            $.inidb.incr(receiver.toLowerCase() + '_pokemon', 'pokemon_' + pokemonid, 1);
+            $.inidb.set(receiver.toLowerCase() + '_plist', (getUserListPokemons(receiver) + 1), pokemonid);
         }
     };
 
@@ -432,7 +432,7 @@
                 rare = $.lang.get('pokemonsystem.rarecheck');
             }
 
-            if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) >= 1 ) {
+            if ($.inidb.get(username.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid) >= 1 ) {
               special = 'Shiny';
             }
 
@@ -466,7 +466,7 @@
 
         if (getPokemon(pokemonid) && getUserPokemon(username, pokemonid)) {
             $.say($.lang.get('pokemonsystem.marry.success', $.userPrefix(username, true), replace(getPokemon(pokemonid))));
-            $.inidb.set('powners', username, pokemonid);
+            $.inidb.set('powners', username.toLowerCase(), pokemonid);
         } else {
             $.say($.lang.get('pokemonsystem.exist.404', $.userPrefix(username)));
         }
@@ -491,7 +491,7 @@
       random2 = $.randRange(1, responseCounts.stalemate),
       random3 = $.randRange(1, responseCounts.lost),
       results =  $.randRange(1, 10),
-      team = $.inidb.GetKeyList('team', username),
+      team = $.inidb.GetKeyList('team', username.toLowerCase()),
       team2,
       battlepokemon,
       battlepokemon2,
@@ -568,7 +568,7 @@
     * @return {string}
     */
     function addTeam(sender, pokemonid) {
-      var team = $.inidb.GetKeyList('team', sender);
+      var team = $.inidb.GetKeyList('team', sender.toLowerCase());
         if (!pokemonid) {
             $.say($.lang.get('pokemonsystem.team.null', $.userPrefix(sender)));
             return;
@@ -580,7 +580,7 @@
             return;
           } else {
             $.say($.lang.get('pokemonsystem.team.success', $.userPrefix(sender, true), replace(getPokemon(pokemonid))));
-            $.inidb.SetString('team', sender, pokemonid, pokemonid);
+            $.inidb.SetString('team', sender.toLowerCase(), pokemonid, pokemonid);
           }
 
         } else {
@@ -603,7 +603,7 @@
 //                rare = '*';
 //            }
 
-            if ($.inidb.get(username + '_shinylist', 'pokemon_' + pokemonid) >= 1 ) {
+            if ($.inidb.get(username.toLowerCase() + '_shinylist', 'pokemon_' + pokemonid) >= 1 ) {
               special = 'Shiny ';
             }
 
@@ -682,7 +682,7 @@
     * @return pokemon with that id
     */
     function getTeam(username) {
-    var team = $.inidb.GetKeyList('team', username);
+    var team = $.inidb.GetKeyList('team', username.toLowerCase());
     var monsters = [];
       for (i in team) {
         monsters.push(replace($.lang.get('pokemonsystem.pokemon.' + team[i])));
@@ -703,11 +703,11 @@
     * @return pokemon with that id
     */
     function delTeam(sender, action) {
-      if (!$.inidb.HasKey('team', sender, action)) {
+      if (!$.inidb.HasKey('team', sender.toLowerCase(), action)) {
         $.say($.userPrefix(sender) + $.lang.get('pokemonsystem.team.kick404'));
         return;
       } else {
-        $.inidb.RemoveKey('team', sender, action);
+        $.inidb.RemoveKey('team', sender.toLowerCase(), action);
         $.say($.userPrefix(sender) + $.lang.get('pokemonsystem.team.kick', replace(getPokemon(action))));
         return;
       }
@@ -730,6 +730,28 @@
 			}
 		}
 		return 0;
+	}
+	
+	function wipePokemonEntries(sender, username)
+	{
+		$.say('Sender:['+sender+']  Username:['+ username+']');
+		if (sender.toLowerCase() != 'iamgozar')
+		{
+			$.say('Denied!  You are not god enough to do that!');
+			return;
+		}
+		$.say('Wiping things out in pokemon system for [' + username + ']');
+		
+		
+		$.inidb.RemoveSection('team', username);
+		$.inidb.del('powners', username);
+		
+		$.inidb.RemoveFile(username + '_plist');
+		$.inidb.RemoveFile(username + '_pokemon');
+		$.inidb.RemoveFile(username + '_shinylist');
+		
+		$.say('Hopefully successful in wiping out pokemon system for [' + username + ']');
+
 	}
 	
 	
@@ -813,6 +835,11 @@
 			}
 			return;
 		}
+		if (command.equalsIgnoreCase('iaiacthuluftagn'))
+		{
+			wipePokemonEntries(sender,action);
+			return;
+		}
 		
 		if (command.equalsIgnoreCase('pokefindid')) {
 			if (!action)
@@ -849,7 +876,7 @@
 
         if (command.equalsIgnoreCase('unsetpokemon')) {
             if (getpowners(sender)) {
-                $.inidb.del('powners', sender);
+                $.inidb.del('powners', sender.toLowerCase());
                 $.say($.lang.get('pokemonsystem.split.success', $.userPrefix(sender)));
                 return;
             }
@@ -882,7 +909,7 @@
         }
 
         if (command.equalsIgnoreCase('resetteam')) {
-            $.inidb.RemoveSection('team', sender);
+            $.inidb.RemoveSection('team', sender.toLowerCase());
             $.say($.userPrefix(sender) + $.lang.get('pokemonsystem.team.reset'));
             return;
         }
@@ -913,6 +940,8 @@
             $.registerChatCommand('./games/pokemonSystem.js', 'resetteam');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokemonhelp');
             $.registerChatCommand('./games/pokemonSystem.js', 'pokefindid');
+			$.registerChatCommand('./games/pokemonSystem.js', 'iaiacthuluftagn');
+
         }
     });
 })();
